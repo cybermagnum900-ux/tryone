@@ -18,18 +18,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      # Menyiapkan Gradle (mematikan cache agar tidak error 400)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          cmdline-tools-version: 9862592
+          gradle-version: 8.2
+          cache-disabled: true 
 
-      # LANGKAH BARU: Membuat Gradle Wrapper Otomatis
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.2
-
-      # Build menggunakan wrapper yang baru dibuat
+      # Langsung build. Android SDK sudah otomatis ada di server GitHub
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
